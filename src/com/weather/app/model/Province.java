@@ -14,6 +14,11 @@ public class Province {
 		this.p_code = code;
 	}
 
+	public Province(String code, String name) {
+		this.p_code = code;
+		this.p_name = name;
+	}
+
 	public int getId() {
 		return id;
 	}

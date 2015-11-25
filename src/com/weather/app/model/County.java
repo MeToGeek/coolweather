@@ -16,6 +16,12 @@ public class County {
 		this.co_name = name;
 	}
 
+	public County(String code, String name, int cid) {
+		this.co_code = code;
+		this.co_name = name;
+		this.c_id = cid;
+	}
+
 	public int getId() {
 		return id;
 	}

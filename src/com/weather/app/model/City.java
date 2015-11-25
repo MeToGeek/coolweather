@@ -16,6 +16,12 @@ public class City {
 		this.c_code = code;
 	}
 
+	public City(String code, String name, int pid) {
+		this.c_code = code;
+		this.c_name = name;
+		this.p_id = pid;
+	}
+
 	public int getId() {
 		return id;
 	}

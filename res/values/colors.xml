@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 公共色 -->
+    <color name="white">#FFFFFF</color>
+
+    <!-- 专有色 -->
+    <color name="top_bg">#484E61</color>
+
+</resources>

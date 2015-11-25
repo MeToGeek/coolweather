@@ -3,14 +3,14 @@ package com.weather.app.db;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.weather.app.model.City;
-import com.weather.app.model.County;
-import com.weather.app.model.Province;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.weather.app.model.City;
+import com.weather.app.model.County;
+import com.weather.app.model.Province;
 
 public class DBCool {
 	public static final String DB_NAME = "weather.db";
@@ -51,10 +51,10 @@ public class DBCool {
 	 */
 	public List<Province> loadProvince() {
 		List<Province> list = new ArrayList<Province>();
-		Cursor query = db.query(TB_PROVINCE_NAME, null, null, null, null, null,
-				null);
-		if (query != null) {
-			do {
+		Cursor query = db.rawQuery("select * from " + TB_PROVINCE_NAME, null);
+		if (query != null && query.getCount() > 0) {
+			query.moveToFirst();
+			while (query.isAfterLast() == false) {
 				int id = query.getInt(query.getColumnIndex("id"));
 				String name = query.getString(query
 						.getColumnIndex("province_name"));
@@ -62,7 +62,8 @@ public class DBCool {
 						.getColumnIndex("province_code"));
 				Province province = new Province(id, name, code);
 				list.add(province);
-			} while (query.moveToNext());
+				query.moveToNext();
+			}
 		}
 		return list;
 	}
@@ -85,10 +86,13 @@ public class DBCool {
 	 */
 	public List<City> loadCity(int p_id) {
 		List<City> list = new ArrayList<City>();
-		Cursor query = db.query(TB_CITY_NAME, null, "province_id=?",
-				new String[] { String.valueOf(p_id) }, null, null, null);
-		if (query != null) {
-			do {
+		Cursor query = db
+				.rawQuery("select * from " + TB_CITY_NAME
+						+ " where province_id=?",
+						new String[] { String.valueOf(p_id) });
+		if (query != null && query.getCount() > 0) {
+			query.moveToFirst();
+			while (query.isAfterLast() == false) {
 				int id = query.getInt(query.getColumnIndex("id"));
 				String name = query
 						.getString(query.getColumnIndex("city_name"));
@@ -96,7 +100,8 @@ public class DBCool {
 						.getString(query.getColumnIndex("city_code"));
 				City city = new City(id, p_id, name, code);
 				list.add(city);
-			} while (query.moveToNext());
+				query.moveToNext();
+			}
 		}
 		return list;
 	}
@@ -119,10 +124,11 @@ public class DBCool {
 	 */
 	public List<County> loadCounty(int c_id) {
 		List<County> list = new ArrayList<County>();
-		Cursor query = db.query(TB_COUNTY_NAME, null, "city_id=?",
-				new String[] { String.valueOf(c_id) }, null, null, null);
-		if (query != null) {
-			do {
+		Cursor query = db.rawQuery("select * from " + TB_COUNTY_NAME
+				+ " where city_id=?", new String[] { String.valueOf(c_id) });
+		if (query != null && query.getCount() > 0) {
+			query.moveToFirst();
+			while (query.isAfterLast() == false) {
 				int id = query.getInt(query.getColumnIndex("id"));
 				String name = query.getString(query
 						.getColumnIndex("county_name"));
@@ -130,7 +136,8 @@ public class DBCool {
 						.getColumnIndex("county_code"));
 				County county = new County(id, c_id, name, code);
 				list.add(county);
-			} while (query.moveToNext());
+				query.moveToNext();
+			}
 		}
 		return list;
 	}
