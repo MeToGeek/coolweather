@@ -1,5 +1,15 @@
 package com.weather.app.util;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.weather.app.db.DBCool;
@@ -90,5 +100,45 @@ public class AnalyticalUtil {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * @param context
+	 * @param response
+	 */
+	public static void handleWeatherResponse(Context context, String response) {
+		try {
+			JSONObject jsonObject = new JSONObject(response);
+			JSONObject weatherInfo = jsonObject.getJSONObject("weatherinfo");
+			String city = weatherInfo.getString("city");
+			String cityid = weatherInfo.getString("cityid");
+			String temp1 = weatherInfo.getString("temp1");
+			String temp2 = weatherInfo.getString("temp2");
+			String weather = weatherInfo.getString("weather");
+			String ptime = weatherInfo.getString("ptime");
+			saveWeatherInfo(context, city, cityid, temp1, temp2, weather, ptime);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 把所有参数都保存到sp文件中
+	 */
+	private static void saveWeatherInfo(Context context, String city,
+			String cityid, String temp1, String temp2, String weather,
+			String ptime) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-M-d", Locale.CHINA);
+		SharedPreferences.Editor edit = PreferenceManager
+				.getDefaultSharedPreferences(context).edit();
+		edit.putBoolean("city_selected", true);
+		edit.putString("city", city);
+		edit.putString("cityid", cityid);
+		edit.putString("temp1", temp1);
+		edit.putString("temp2", temp2);
+		edit.putString("weather", weather);
+		edit.putString("ptime", ptime);
+		edit.putString("ctime", format.format(new Date()));
+		edit.commit();
 	}
 }
